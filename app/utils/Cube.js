@@ -1,4 +1,44 @@
 export class Cube {
+    // Face au-dessus
+    static U = 0
+
+    // Face en face
+    static F = 1
+
+    // Face à droite
+    static R = 2
+
+    // Face arrière
+    static B = 3
+
+    // Face à gauche
+    static L = 4
+
+    // Face au-dessous
+    static D = 5
+
+    static TOP_LEFT = 0
+
+    static TOP_MID = 1
+
+    static TOP_RIGHT = 2
+
+    static MID_LEFT = 3
+
+    static CENTER = 4
+
+    static MID_RIGHT = 5
+
+    static BOTTOM_LEFT = 6
+
+    static BOTTOM_MID = 7
+
+    static BOTTOM_RIGHT = 8
+
+    static ROTATION_CLOCKWISE = [6, 3, 0, 7, 4, 1, 8, 5, 2]
+
+    static ROTATION_COUNTER_CLOCKWISE = [2, 5, 8, 1, 4, 7, 0, 3, 6]
+
     constructor(faces) {
         this.faces = faces
     }
@@ -10,24 +50,24 @@ export class Cube {
     U() {
         const copiedFace = this._copyFaces()
 
-        const rotationTable = [6, 3, 0, 7, 4, 1, 8, 5, 2]
+        const rotationTable = Cube.ROTATION_CLOCKWISE
 
         // changement sur la face du dessus -> Blanche
         for (let rotationTableIndex = 0; rotationTableIndex < rotationTable.length; rotationTableIndex++) {
-            this.faces[0][rotationTableIndex] = copiedFace[0][rotationTable[rotationTableIndex]]
+            this.faces[Cube.U][rotationTableIndex] = copiedFace[Cube.U][rotationTable[rotationTableIndex]]
         }
 
         // La couronne du roi
         for (let index = 1; index <= 4; index++) {
-            const isOrangeIndex = index === 4
+            const isLIndex = index === Cube.L
 
-            const sourceIndex = !isOrangeIndex ? index + 1 : 1
+            const sourceIndex = !isLIndex ? index + 1 : 1
 
-            this.faces[index][0] = copiedFace[sourceIndex][0]
+            this.faces[index][Cube.TOP_LEFT] = copiedFace[sourceIndex][Cube.TOP_LEFT]
 
-            this.faces[index][1] = copiedFace[sourceIndex][1]
+            this.faces[index][Cube.TOP_MID] = copiedFace[sourceIndex][Cube.TOP_MID]
 
-            this.faces[index][2] = copiedFace[sourceIndex][2]
+            this.faces[index][Cube.TOP_RIGHT] = copiedFace[sourceIndex][Cube.TOP_RIGHT]
         }
     }
 
@@ -45,24 +85,24 @@ export class Cube {
     D() {
         const copiedFace = this._copyFaces()
 
-        const rotationTable = [2, 5, 8, 1, 4, 7, 0, 3, 6]
+        const rotationTable = Cube.ROTATION_COUNTER_CLOCKWISE
 
         // changement sur la face du dessous -> Jaune
         for (let rotationTableIndex = 0; rotationTableIndex < rotationTable.length; rotationTableIndex++) {
-            this.faces[5][rotationTableIndex] = copiedFace[5][rotationTable[rotationTableIndex]]
+            this.faces[Cube.D][rotationTableIndex] = copiedFace[Cube.D][rotationTable[rotationTableIndex]]
         }
 
         // la couronne
         for (let index = 1; index <= 4; index++) {
-            const isGreenIndex = index === 1
+            const isFIndex = index === Cube.F
 
-            const sourceIndex = !isGreenIndex ? index - 1 : 4
+            const sourceIndex = !isFIndex ? index - 1 : 4
 
-            this.faces[index][6] = copiedFace[sourceIndex][6]
+            this.faces[index][Cube.BOTTOM_LEFT] = copiedFace[sourceIndex][Cube.BOTTOM_LEFT]
 
-            this.faces[index][7] = copiedFace[sourceIndex][7]
+            this.faces[index][Cube.BOTTOM_MID] = copiedFace[sourceIndex][Cube.BOTTOM_MID]
 
-            this.faces[index][8] = copiedFace[sourceIndex][8]
+            this.faces[index][Cube.BOTTOM_RIGHT] = copiedFace[sourceIndex][Cube.BOTTOM_RIGHT]
         }
     }
 
@@ -80,41 +120,41 @@ export class Cube {
     F() {
         const copiedFace = this._copyFaces()
 
-        const rotationTable = [6, 3, 0, 7, 4, 1, 8, 5, 2]
+        const rotationTable = Cube.ROTATION_CLOCKWISE
 
         // changement sur la face en face de nous -> Verte
         for (let rotationTableIndex = 0; rotationTableIndex < rotationTable.length; rotationTableIndex++) {
-            this.faces[1][rotationTableIndex] = copiedFace[1][rotationTable[rotationTableIndex]]
+            this.faces[Cube.F][rotationTableIndex] = copiedFace[Cube.F][rotationTable[rotationTableIndex]]
         }
 
         // la couronne
         // face blanche
-        this.faces[0][6] = copiedFace[4][8]
+        this.faces[Cube.U][Cube.BOTTOM_LEFT] = copiedFace[Cube.L][Cube.BOTTOM_RIGHT]
 
-        this.faces[0][7] = copiedFace[4][5]
+        this.faces[Cube.U][Cube.BOTTOM_MID] = copiedFace[Cube.L][Cube.MID_RIGHT]
 
-        this.faces[0][8] = copiedFace[4][2]
+        this.faces[Cube.U][Cube.BOTTOM_RIGHT] = copiedFace[Cube.L][Cube.TOP_RIGHT]
 
         // face rouge
-        this.faces[2][0] = copiedFace[0][6]
+        this.faces[Cube.R][Cube.TOP_LEFT] = copiedFace[Cube.U][Cube.BOTTOM_LEFT]
 
-        this.faces[2][3] = copiedFace[0][7]
+        this.faces[Cube.R][Cube.MID_LEFT] = copiedFace[Cube.U][Cube.BOTTOM_MID]
 
-        this.faces[2][6] = copiedFace[0][8]
+        this.faces[Cube.R][Cube.BOTTOM_LEFT] = copiedFace[Cube.U][Cube.BOTTOM_RIGHT]
 
         // face jaune
-        this.faces[5][0] = copiedFace[2][6]
+        this.faces[Cube.D][Cube.TOP_LEFT] = copiedFace[Cube.R][Cube.BOTTOM_LEFT]
 
-        this.faces[5][1] = copiedFace[2][3]
+        this.faces[Cube.D][Cube.TOP_MID] = copiedFace[Cube.R][Cube.MID_LEFT]
 
-        this.faces[5][2] = copiedFace[2][0]
+        this.faces[Cube.D][Cube.TOP_RIGHT] = copiedFace[Cube.R][Cube.TOP_LEFT]
 
         // face orange
-        this.faces[4][2] = copiedFace[5][0]
+        this.faces[Cube.L][Cube.TOP_RIGHT] = copiedFace[Cube.D][Cube.TOP_LEFT]
 
-        this.faces[4][5] = copiedFace[5][1]
+        this.faces[Cube.L][Cube.MID_RIGHT] = copiedFace[Cube.D][Cube.TOP_MID]
 
-        this.faces[4][8] = copiedFace[5][2]
+        this.faces[Cube.L][Cube.BOTTOM_RIGHT] = copiedFace[Cube.D][Cube.TOP_RIGHT]
     }
 
     FPrime() {
@@ -131,40 +171,40 @@ export class Cube {
     B() {
         const copiedFace = this._copyFaces()
 
-        const rotationTable = [6, 3, 0, 7, 4, 1, 8, 5, 2]
+        const rotationTable = Cube.ROTATION_CLOCKWISE
 
         // changement sur la face arrière -> Bleue
         for (let rotationTableIndex = 0; rotationTableIndex < rotationTable.length; rotationTableIndex++) {
-            this.faces[3][rotationTableIndex] = copiedFace[3][rotationTable[rotationTableIndex]]
+            this.faces[Cube.B][rotationTableIndex] = copiedFace[Cube.B][rotationTable[rotationTableIndex]]
         }
 
         // face blanche
-        this.faces[0][0] = copiedFace[2][2]
+        this.faces[Cube.U][Cube.TOP_LEFT] = copiedFace[Cube.R][Cube.TOP_RIGHT]
 
-        this.faces[0][1] = copiedFace[2][5]
+        this.faces[Cube.U][Cube.TOP_MID] = copiedFace[Cube.R][Cube.MID_RIGHT]
 
-        this.faces[0][2] = copiedFace[2][8]
+        this.faces[Cube.U][Cube.TOP_RIGHT] = copiedFace[Cube.R][Cube.BOTTOM_RIGHT]
 
         // face rouge
-        this.faces[2][2] = copiedFace[5][8]
+        this.faces[Cube.R][Cube.TOP_RIGHT] = copiedFace[Cube.D][Cube.BOTTOM_RIGHT]
 
-        this.faces[2][5] = copiedFace[5][7]
+        this.faces[Cube.R][Cube.MID_RIGHT] = copiedFace[Cube.D][Cube.BOTTOM_MID]
 
-        this.faces[2][8] = copiedFace[5][6]
+        this.faces[Cube.R][Cube.BOTTOM_RIGHT] = copiedFace[Cube.D][Cube.BOTTOM_LEFT]
 
         // face orange
-        this.faces[4][6] = copiedFace[0][0]
+        this.faces[Cube.L][Cube.BOTTOM_LEFT] = copiedFace[Cube.U][Cube.TOP_LEFT]
 
-        this.faces[4][3] = copiedFace[0][1]
+        this.faces[Cube.L][Cube.MID_LEFT] = copiedFace[Cube.U][Cube.TOP_MID]
 
-        this.faces[4][0] = copiedFace[0][2]
+        this.faces[Cube.L][Cube.TOP_LEFT] = copiedFace[Cube.U][Cube.TOP_RIGHT]
 
         // face jaune
-        this.faces[5][8] = copiedFace[4][6]
+        this.faces[Cube.D][Cube.BOTTOM_RIGHT] = copiedFace[Cube.L][Cube.BOTTOM_LEFT]
 
-        this.faces[5][7] = copiedFace[4][3]
-        
-        this.faces[5][6] = copiedFace[4][0]
+        this.faces[Cube.D][Cube.BOTTOM_MID] = copiedFace[Cube.L][Cube.MID_LEFT]
+
+        this.faces[Cube.D][Cube.BOTTOM_LEFT] = copiedFace[Cube.L][Cube.TOP_LEFT]
     }
 
     BPrime() {
@@ -181,40 +221,40 @@ export class Cube {
     R() {
         const copiedFace = this._copyFaces()
 
-        const rotationTable = [6, 3, 0, 7, 4, 1, 8, 5, 2]
+        const rotationTable = Cube.ROTATION_CLOCKWISE
 
         // changement sur la face arrière -> Rouge
         for (let rotationTableIndex = 0; rotationTableIndex < rotationTable.length; rotationTableIndex++) {
-            this.faces[2][rotationTableIndex] = copiedFace[2][rotationTable[rotationTableIndex]]
+            this.faces[Cube.R][rotationTableIndex] = copiedFace[Cube.R][rotationTable[rotationTableIndex]]
         }
 
         // face blanche
-        this.faces[0][2] = copiedFace[1][2]
+        this.faces[Cube.U][Cube.TOP_RIGHT] = copiedFace[Cube.F][Cube.TOP_RIGHT]
 
-        this.faces[0][5] = copiedFace[1][5]
+        this.faces[Cube.U][Cube.MID_RIGHT] = copiedFace[Cube.F][Cube.MID_RIGHT]
 
-        this.faces[0][8] = copiedFace[1][8]
+        this.faces[Cube.U][Cube.BOTTOM_RIGHT] = copiedFace[Cube.F][Cube.BOTTOM_RIGHT]
 
         // face verte
-        this.faces[1][2] = copiedFace[5][2]
+        this.faces[Cube.F][Cube.TOP_RIGHT] = copiedFace[Cube.D][Cube.TOP_RIGHT]
 
-        this.faces[1][5] = copiedFace[5][5]
+        this.faces[Cube.F][Cube.MID_RIGHT] = copiedFace[Cube.D][Cube.MID_RIGHT]
 
-        this.faces[1][8] = copiedFace[5][8]
+        this.faces[Cube.F][Cube.BOTTOM_RIGHT] = copiedFace[Cube.D][Cube.BOTTOM_RIGHT]
 
         // face jaune
-        this.faces[5][2] = copiedFace[3][6]
+        this.faces[Cube.D][Cube.TOP_RIGHT] = copiedFace[Cube.B][Cube.BOTTOM_LEFT]
 
-        this.faces[5][5] = copiedFace[3][3]
+        this.faces[Cube.D][Cube.MID_RIGHT] = copiedFace[Cube.B][Cube.MID_LEFT]
 
-        this.faces[5][8] = copiedFace[3][0]
+        this.faces[Cube.D][Cube.BOTTOM_RIGHT] = copiedFace[Cube.B][Cube.TOP_LEFT]
 
         // face bleue
-        this.faces[3][6] = copiedFace[0][2]
+        this.faces[Cube.B][Cube.BOTTOM_LEFT] = copiedFace[Cube.U][Cube.TOP_RIGHT]
 
-        this.faces[3][3] = copiedFace[0][5]
+        this.faces[Cube.B][Cube.MID_LEFT] = copiedFace[Cube.U][Cube.MID_RIGHT]
 
-        this.faces[3][0] = copiedFace[0][8]
+        this.faces[Cube.B][Cube.TOP_LEFT] = copiedFace[Cube.U][Cube.BOTTOM_RIGHT]
     }
 
     RPrime() {
@@ -228,47 +268,43 @@ export class Cube {
         this.R()
     }
 
-    // Pourquoi const rotationTable = [6, 3, 0, 7, 4, 1, 8, 5, 2] se répète 5 fois dans ma class ? 
-
-    // éxiste une meilleur manire moins hardcodé et impossible de se souvenir ce que j'ai écris en revenant dessus dans 1 an sur les nouvelles positions des couleurs ? 
-
     L() {
         const copiedFace = this._copyFaces()
 
-        const rotationTable = [6, 3, 0, 7, 4, 1, 8, 5, 2]
+        const rotationTable = Cube.ROTATION_CLOCKWISE
 
         // changement sur la face arrière -> Orange
         for (let rotationTableIndex = 0; rotationTableIndex < rotationTable.length; rotationTableIndex++) {
-            this.faces[4][rotationTableIndex] = copiedFace[4][rotationTable[rotationTableIndex]]
+            this.faces[Cube.L][rotationTableIndex] = copiedFace[Cube.L][rotationTable[rotationTableIndex]]
         }
 
         // face blanche
-        this.faces[0][0] = copiedFace[3][8]
+        this.faces[Cube.U][Cube.TOP_LEFT] = copiedFace[Cube.B][Cube.BOTTOM_RIGHT]
 
-        this.faces[0][3] = copiedFace[3][5]
+        this.faces[Cube.U][Cube.MID_LEFT] = copiedFace[Cube.B][Cube.MID_RIGHT]
 
-        this.faces[0][6] = copiedFace[3][2]
+        this.faces[Cube.U][Cube.BOTTOM_LEFT] = copiedFace[Cube.B][Cube.TOP_RIGHT]
 
         // face verte
-        this.faces[1][0] = copiedFace[0][0]
+        this.faces[Cube.F][Cube.TOP_LEFT] = copiedFace[Cube.U][Cube.TOP_LEFT]
 
-        this.faces[1][3] = copiedFace[0][3]
+        this.faces[Cube.F][Cube.MID_LEFT] = copiedFace[Cube.U][Cube.MID_LEFT]
 
-        this.faces[1][6] = copiedFace[0][6]
+        this.faces[Cube.F][Cube.BOTTOM_LEFT] = copiedFace[Cube.U][Cube.BOTTOM_LEFT]
 
         // face jaune
-        this.faces[5][0] = copiedFace[1][0]
+        this.faces[Cube.D][Cube.TOP_LEFT] = copiedFace[Cube.F][Cube.TOP_LEFT]
 
-        this.faces[5][3] = copiedFace[1][3]
+        this.faces[Cube.D][Cube.MID_LEFT] = copiedFace[Cube.F][Cube.MID_LEFT]
 
-        this.faces[5][6] = copiedFace[1][6]
+        this.faces[Cube.D][Cube.BOTTOM_LEFT] = copiedFace[Cube.F][Cube.BOTTOM_LEFT]
 
         // face bleue
-        this.faces[3][2] = copiedFace[5][6]
+        this.faces[Cube.B][Cube.TOP_RIGHT] = copiedFace[Cube.D][Cube.BOTTOM_LEFT]
 
-        this.faces[3][5] = copiedFace[5][3]
+        this.faces[Cube.B][Cube.MID_RIGHT] = copiedFace[Cube.D][Cube.MID_LEFT]
 
-        this.faces[3][8] = copiedFace[5][0]
+        this.faces[Cube.B][Cube.BOTTOM_RIGHT] = copiedFace[Cube.D][Cube.TOP_LEFT]
     }
 
     LPrime() {
