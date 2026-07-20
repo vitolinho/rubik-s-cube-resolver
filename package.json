@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test": "vitest"
   },
   "dependencies": {
     "@nuxt/ui": "^4.10.0",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.16.0",
-    "eslint": "^10.7.0"
+    "eslint": "^10.7.0",
+    "vitest": "^4.1.10"
   }
 }
