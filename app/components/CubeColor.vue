@@ -20,7 +20,7 @@ const colors = {
 
 <template>
     <div
-        class="size-10"
+        class="size-6 lg:size-10"
         :class="colors[color]"
     />
 </template>
