@@ -1,5 +1,11 @@
+<script setup>
+
+const toaster = { position: 'bottom-right' }
+
+</script>
+
 <template>
-    <UApp>
+    <UApp :toaster="toaster">
         <NuxtLayout>
             <NuxtPage />
         </NuxtLayout>
