@@ -37,7 +37,26 @@ export class Cube {
 
     static ROTATION_CLOCKWISE = [6, 3, 0, 7, 4, 1, 8, 5, 2]
 
-    static ROTATION_COUNTER_CLOCKWISE = [2, 5, 8, 1, 4, 7, 0, 3, 6]
+    static NOTATION_TO_METHOD = {
+        "U": "U",
+        "U'": "UPrime",
+        "U2": "U2",
+        "D": "D",
+        "D'": "DPrime",
+        "D2": "D2",
+        "F": "F",
+        "F'": "FPrime",
+        "F2": "F2",
+        "B": "B",
+        "B'": "BPrime",
+        "B2": "B2",
+        "R": "R",
+        "R'": "RPrime",
+        "R2": "R2",
+        "L": "L",
+        "L'": "LPrime",
+        "L2": "L2"
+    }
 
     constructor(faces) {
         this.faces = faces
@@ -85,7 +104,7 @@ export class Cube {
     D() {
         const copiedFace = this._copyFaces()
 
-        const rotationTable = Cube.ROTATION_COUNTER_CLOCKWISE
+        const rotationTable = Cube.ROTATION_CLOCKWISE
 
         // changement sur la face du dessous -> Jaune
         for (let rotationTableIndex = 0; rotationTableIndex < rotationTable.length; rotationTableIndex++) {
@@ -316,5 +335,28 @@ export class Cube {
     L2() {
         this.L()
         this.L()
+    }
+
+    applyMoves(notation) {
+        const splittedNotation = notation.split(' ')
+
+        for (const movement of splittedNotation) {
+            if (movement !== '') {
+                const movementName = Cube.NOTATION_TO_METHOD[movement]
+
+                if (!movementName) throw new Error("Inexistant movement")
+
+                this[movementName]()
+            }
+        }
+    }
+
+    reset() {
+        this.faces[Cube.U] = Array(9).fill('W')
+        this.faces[Cube.F] = Array(9).fill('G')
+        this.faces[Cube.R] = Array(9).fill('R')
+        this.faces[Cube.B] = Array(9).fill('B')
+        this.faces[Cube.L] = Array(9).fill('O')
+        this.faces[Cube.D] = Array(9).fill('Y')
     }
 }

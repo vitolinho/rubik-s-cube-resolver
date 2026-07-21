@@ -2,6 +2,33 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { Face } from '~/utils/Face.js'
 import { Cube } from '~/utils/Cube.js'
 
+const scrambleTests = [
+    {
+        name: "scramble CubeTime 1",
+        moves: "D' L' F D' B2 F2 D L2 D2 L2 D L2 B2 R B2 F2 U' R2 F' R'",
+        expected: [
+            ["B", "R", "O", "B", "W", "B", "B", "O", "W"],
+            ["O", "W", "B", "G", "G", "G", "Y", "Y", "O"],
+            ["O", "R", "G", "W", "R", "B", "G", "Y", "B"],
+            ["W", "Y", "R", "W", "B", "W", "R", "O", "R"],
+            ["Y", "O", "Y", "R", "O", "R", "G", "Y", "R"],
+            ["G", "O", "Y", "G", "Y", "B", "W", "G", "W"],
+        ]
+    },
+    {
+        name: "scramble simple",
+        moves: "R U R' U'",
+        expected: [
+            ["W", "W", "O", "W", "W", "G", "W", "W", "G"],
+            ["G", "G", "Y", "G", "G", "W", "G", "G", "G"],
+            ["R", "R", "W", "B", "R", "R", "W", "R", "R"],
+            ["B", "R", "R", "B", "B", "B", "B", "B", "B"],
+            ["B", "O", "O", "O", "O", "O", "O", "O", "O"],
+            ["Y", "Y", "R", "Y", "Y", "Y", "Y", "Y", "Y"],
+        ]
+    }
+]
+
 const createSolvedCube = () => {
     return new Cube([
         new Face('W').face,
@@ -256,5 +283,71 @@ describe('L()', () => {
         cube.L2()
 
         expect(cube.faces).toEqual(initialState)
+    })
+})
+
+describe('applyMoves()', () => {
+    it('applyMoves("U") devrait produire le même résultat que cube.U()', () => {
+        const cubeA = createSolvedCube()
+        const cubeB = createSolvedCube()
+
+        cubeA.applyMoves('U')
+        cubeB.U()
+
+        expect(cubeA.faces).toEqual(cubeB.faces)
+    })
+
+    it('applyMoves("R U R\' U\'") devrait appliquer les 4 mouvements dans l\'ordre', () => {
+        const cubeA = createSolvedCube()
+        const cubeB = createSolvedCube()
+
+        cubeA.applyMoves("R U R' U'")
+        cubeB.R()
+        cubeB.U()
+        cubeB.RPrime()
+        cubeB.UPrime()
+
+        expect(cubeA.faces).toEqual(cubeB.faces)
+    })
+
+    it('applyMoves("F2 B\' D") devrait gérer les variantes', () => {
+        const cubeA = createSolvedCube()
+        const cubeB = createSolvedCube()
+
+        cubeA.applyMoves("F2 B' D")
+        cubeB.F2()
+        cubeB.BPrime()
+        cubeB.D()
+
+        expect(cubeA.faces).toEqual(cubeB.faces)
+    })
+
+    it('applyMoves("X Y Z") devrait lever une erreur', () => {
+        const cube = createSolvedCube()
+
+        expect(() => cube.applyMoves("X Y Z")).toThrow()
+    })
+})
+
+describe('scrambles de référence', () => {
+    for (const test of scrambleTests) {
+        it(test.name, () => {
+            const cube = createSolvedCube()
+
+            cube.applyMoves(test.moves)
+
+            expect(cube.faces).toEqual(test.expected)
+        })
+    }
+})
+
+describe('reset()', () => {
+    it('reset() devrait ramener le cube à l\'état résolu', () => {
+        const cube = createSolvedCube()
+
+        cube.applyMoves("R U R'")
+        cube.reset()
+        
+        expect(cube.faces).toEqual(createSolvedCube().faces)
     })
 })
