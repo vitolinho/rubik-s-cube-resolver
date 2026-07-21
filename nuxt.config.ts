@@ -5,6 +5,9 @@ export default defineNuxtConfig({
     modules: ['@nuxt/ui', '@nuxt/eslint'],
     css: ['~/assets/css/main.css'],
     nitro: {
-        preset: 'cloudflare-pages'
+        preset: 'cloudflare-pages',
+        cloudflare: {
+            nodeCompat: true
+        }
     }
 })
