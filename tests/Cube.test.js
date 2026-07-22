@@ -351,3 +351,32 @@ describe('reset()', () => {
         expect(cube.faces).toEqual(createSolvedCube().faces)
     })
 })
+
+describe('clone()', () => {
+    let original
+
+    let cloned
+
+    beforeEach(() => {
+        original = createSolvedCube()
+        
+        original.applyMoves("R U R' F")
+
+        cloned = original.clone()
+    })
+
+
+    it('devrait avoir le même contenu que l\'original', () => {
+        expect(cloned.faces).toEqual(original.faces)
+    })
+
+    it('devrait être indépendant de l\'original', () => {
+        cloned.U()
+
+        expect(cloned.faces).not.toEqual(original.faces)
+    })
+
+    it('devrait retourner une instance de Cube', () => {
+        expect(cloned).toBeInstanceOf(Cube)
+    })
+})

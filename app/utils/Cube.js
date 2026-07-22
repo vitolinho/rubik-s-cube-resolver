@@ -359,4 +359,8 @@ export class Cube {
         this.faces[Cube.L] = Array(9).fill('O')
         this.faces[Cube.D] = Array(9).fill('Y')
     }
+
+    clone() {
+        return new Cube(this._copyFaces())
+    }
 }
