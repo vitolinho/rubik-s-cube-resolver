@@ -29,7 +29,7 @@ const scrambleTests = [
     }
 ]
 
-const createSolvedCube = () => {
+export const createSolvedCube = () => {
     return new Cube([
         new Face('W').face,
         new Face('G').face,
